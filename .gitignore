@@ -11,3 +11,5 @@ target
 /snap/.snapcraft
 /stage
 /*.snap
+
+.vscode

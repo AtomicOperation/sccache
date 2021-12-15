@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  vscode:
+    build: .
+    image: sccache-dev
+    volumes:
+      - ../:/workspace
+      # Docker
+      - ~/.docker:/root/.docker:z
+      # Docker socket to access Docker server
+      - /var/run/docker.sock:/var/run/docker.sock
+      # SSH directory for Linux, OSX and WSL
+      - ~/.ssh:/root/.ssh:z
+    environment:
+      - TZ=
+    # Needed for debugging
+    # cap_add:
+    #   - SYS_PTRACE
+    # security_opt:
+    #   - seccomp:unconfined
+    entrypoint: sh -c "while sleep 1000; do :; done"

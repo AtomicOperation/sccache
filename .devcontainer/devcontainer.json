@@ -1,0 +1,20 @@
+{
+    "name": "project-dev",
+    "dockerComposeFile": ["docker-compose.yml"],
+    "service": "vscode",
+    "runServices": ["vscode"],
+    "shutdownAction": "stopCompose",
+    "postCreateCommand": "",
+    "workspaceFolder": "/workspace",
+    // "overrideCommand": "",
+    "extensions": [
+    ],
+    "settings": {
+        "files.eol": "\n",
+        "remote.extensionKind": {
+            "ms-azuretools.vscode-docker": "workspace"
+        },
+        "editor.codeActionsOnSaveTimeout": 3000,
+        "rust-analyzer.serverPath": "/usr/local/bin/rust-analyzer"
+    }
+}
