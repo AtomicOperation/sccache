@@ -5,7 +5,7 @@
     "runServices": ["vscode"],
     "shutdownAction": "stopCompose",
     "postCreateCommand": "",
-    "workspaceFolder": "/workspace",
+    "workspaceFolder": "/usr/src/sccache",
     // "overrideCommand": "",
     "extensions": [
     ],

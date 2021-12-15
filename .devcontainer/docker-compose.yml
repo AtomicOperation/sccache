@@ -5,13 +5,14 @@ services:
     build: .
     image: sccache-dev
     volumes:
-      - ../:/workspace
+      - ../:/usr/src/sccache
       # Docker
       - ~/.docker:/root/.docker:z
       # Docker socket to access Docker server
       - /var/run/docker.sock:/var/run/docker.sock
-      # SSH directory for Linux, OSX and WSL
       - ~/.ssh:/root/.ssh:z
+      - ~/.zsh:/root/.zsh:z
+      - ~/.zshrc:/root/.zshrc
     environment:
       - TZ=
     # Needed for debugging
@@ -19,4 +20,4 @@ services:
     #   - SYS_PTRACE
     # security_opt:
     #   - seccomp:unconfined
-    entrypoint: sh -c "while sleep 1000; do :; done"
+    entrypoint: sleep infinite
