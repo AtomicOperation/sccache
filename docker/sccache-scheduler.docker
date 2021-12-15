@@ -1,8 +1,8 @@
 ARG base=ubuntu:20.04
-
-FROM sccache as builder
-
 FROM ${base}
+
+ARG target=debug
+
 USER root
 
 RUN apt update
@@ -10,12 +10,12 @@ RUN apt install -y libssl1.1 --no-install-recommends
 RUN apt install bubblewrap
 
 WORKDIR /opt/sccache
-COPY --from=builder /usr/src/sccache/target/release/sccache-dist sccache-dist
-COPY scheduler.conf scheduler.conf
+COPY target/${target}/sccache-dist sccache-dist
+COPY docker/scheduler.conf scheduler.conf
 
 EXPOSE 10600
 ENV SCCACHE_NO_DAEMON=1
-ENV RUST_LOG=warn
+ENV RUST_LOG=debug
 
 STOPSIGNAL SIGINT
 ENTRYPOINT [ "/opt/sccache/sccache-dist", "scheduler", "--config", "scheduler.conf" ]

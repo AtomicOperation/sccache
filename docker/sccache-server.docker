@@ -1,8 +1,8 @@
 ARG base=ubuntu:20.04
-
-FROM sccache as builder
-
 FROM ${base}
+
+ARG target=debug
+
 USER root
 
 RUN apt update
@@ -10,14 +10,14 @@ RUN apt install -y libssl1.1 --no-install-recommends
 RUN apt install bubblewrap
 
 WORKDIR /opt/sccache
-COPY --from=builder /usr/src/sccache/target/release/sccache-dist sccache-dist
-COPY server.conf server.conf
-COPY sccache-server.sh sccache-server.sh
+COPY target/${target}/sccache-dist sccache-dist
+COPY docker/server.conf server.conf
+COPY docker/sccache-server.sh sccache-server.sh
 RUN chmod +x sccache-server.sh
 
-EXPOSE 10501
+EXPOSE 10600
 ENV SCCACHE_NO_DAEMON=1
-ENV RUST_LOG=trace 
+ENV RUST_LOG=debug
 
 STOPSIGNAL SIGINT
-ENTRYPOINT [ "/opt/sccache/sccache-server.sh" ]
+ENTRYPOINT [ "/opt/sccache/sccache-server.sh", "server", "--config", "server.conf" ]

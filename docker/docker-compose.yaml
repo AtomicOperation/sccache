@@ -1,20 +1,20 @@
 version: "3.9"  # optional since v1.27.0
 services:
   scheduler:
-    build: 
-        context: .
-        dockerfile: sccache-scheduler.docker
-        args: 
-          base: cswiedler
     container_name: sccache-scheduler
+    build: 
+        context: ..
+        dockerfile: docker/sccache-scheduler.docker
+        args: 
+          base: sccache-dev
     ports:
       - "10600:10600"
   server:
     container_name: sccache-server
     build:
-      context: .
-      dockerfile: sccache-server.docker
+      context: ..
+      dockerfile: docker/sccache-server.docker
       args: 
-        base: cswiedler
+        base: sccache-dev
     ports:
       - "10501:10501"
