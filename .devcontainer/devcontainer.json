@@ -4,6 +4,7 @@
     "service": "vscode",
     "runServices": ["vscode"],
     "shutdownAction": "stopCompose",
+    "forwardPorts" : [10600,10501],
     "postCreateCommand": "",
     "workspaceFolder": "/usr/src/sccache",
     // "overrideCommand": "",

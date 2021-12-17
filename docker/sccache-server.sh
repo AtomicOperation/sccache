@@ -1,7 +1,36 @@
 #!/bin/bash
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-SERVER_IP=`hostname -I`
-sed -i -e "s/SERVER_IP/${SERVER_IP//[[:space:]]/}/g" server.conf
+function cleanup()
+{
+    pkill sccache-dist
+    pkill -f /sccache/
+}
 
-$SCRIPT_DIR/sccache-dist $*
+trap cleanup EXIT
+
+cleanup
+
+case `uname` in
+  Darwin)
+    BUILD=mac
+    rm -rf ~/Library/Caches/Mozilla.sccache 
+    CARGO_TARGET_DIR=target/$BUILD cargo build
+    BUILD_ERR=$?
+  ;;
+  Linux)
+    BUILD=linux
+    rm -rf /root/.cache/sccache
+    CARGO_TARGET_DIR=target/$BUILD cargo build --features="dist-client dist-server"
+    BUILD_ERR=$?
+  ;;
+esac
+
+if [[ $BUILD_ERR != 0 ]]; then
+  exit 1
+fi
+
+SCCACHE_NO_DAEMON=1 RUST_LOG=trace,sccache=trace,hyper=trace,rouille=trace SCCACHE_LOG=trace target/linux/debug/sccache-dist scheduler --config docker/scheduler.conf > scheduler.log 2>&1 & 
+SCCACHE_NO_DAEMON=1 RUST_LOG=trace,sccache=trace,hyper=trace,rouille=trace SCCACHE_LOG=trace target/linux/debug/sccache-dist server --config docker/server.conf > server.log 2>&1  &
+tail -f server.log #scheduler.log
+#read -n 1 -s
+#SCCACHE_NO_DAEMON=1 RUST_LOG=trace,sccache=trace,hyper=trace SCCACHE_LOG=trace target/linux/debug/sccache /usr/bin/c++ -o test.o -c test.cpp

@@ -1,0 +1,14 @@
+[dist]
+# The URL used to connect to the scheduler (should use https, given an ideal
+# setup of a HTTPS server in front of the scheduler)
+scheduler_url = "http://localhost:10600"
+
+[[dist.toolchains]]
+type = "path_override"
+archive = "/usr/src/sccache/clang.tgz"
+archive_compiler_executable = "/usr/bin/clang"
+compiler_executable = "/usr/bin/clang"
+
+[dist.auth]
+type = "token"
+token = "DANGEROUSLY_INSECURE"

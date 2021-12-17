@@ -13,3 +13,6 @@ target
 /*.snap
 
 .vscode
+tmp
+store
+test.*

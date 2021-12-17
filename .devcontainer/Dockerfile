@@ -16,9 +16,9 @@ RUN LATEST_COMPOSE_VERSION=$(curl -sSL "https://api.github.com/repos/docker/comp
     && curl -sSL "https://github.com/docker/compose/releases/download/${LATEST_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose
 
-RUN apt install -y sudo vim zsh curl iputils-ping iproute2 wget git lldb gdb
+RUN apt install -y sudo vim zsh curl iputils-ping iproute2 wget git lldb gdb clang lld cmake patch python lzma-dev libxml2-dev rsync strace
 RUN apt install -y bubblewrap
 
+COPY sccache-config /root/.config/sccache/config
+
 ENV SHELL /bin/zsh
-ENV SCCACHE_NO_DAEMON 1 
-ENV RUST_LOG debug

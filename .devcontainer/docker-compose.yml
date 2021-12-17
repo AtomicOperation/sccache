@@ -4,8 +4,10 @@ services:
   vscode:
     build: .
     image: sccache-dev
+    container_name: sccache-dev
+    privileged: true
     volumes:
-      - ../:/usr/src/sccache
+      - ../..:/usr/src
       # Docker
       - ~/.docker:/root/.docker:z
       # Docker socket to access Docker server
@@ -13,11 +15,15 @@ services:
       - ~/.ssh:/root/.ssh:z
       - ~/.zsh:/root/.zsh:z
       - ~/.zshrc:/root/.zshrc
+    tmpfs:
+      /usr/src/sccache/tmp
     environment:
       - TZ=
+      - CARGO_HOME=/usr/src/sccache/target/linux/cargo
     # Needed for debugging
     cap_add:
       - SYS_PTRACE
+      - SYS_ADMIN
     security_opt:
       - seccomp:unconfined
     entrypoint: sh -c "while sleep 1000; do :; done"
