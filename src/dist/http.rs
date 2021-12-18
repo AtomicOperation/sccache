@@ -1069,6 +1069,7 @@ mod client {
 
     const REQUEST_TIMEOUT_SECS: u64 = 600;
     const CONNECT_TIMEOUT_SECS: u64 = 5;
+    const IDLE_TIMEOUT_SECS: u64 = 90;
 
     pub struct Client {
         auth_token: String,
@@ -1096,14 +1097,19 @@ mod client {
         ) -> Result<Self> {
             let timeout = Duration::new(REQUEST_TIMEOUT_SECS, 0);
             let connect_timeout = Duration::new(CONNECT_TIMEOUT_SECS, 0);
+            let idle_timeout = Duration::new(IDLE_TIMEOUT_SECS, 0);
             let client = reqwest::blocking::ClientBuilder::new()
                 .timeout(timeout)
                 .connect_timeout(connect_timeout)
+                .pool_idle_timeout(idle_timeout)
+                .pool_max_idle_per_host(0)
                 .build()
                 .context("failed to create a HTTP client")?;
             let client_async = reqwest::ClientBuilder::new()
                 .timeout(timeout)
                 .connect_timeout(connect_timeout)
+                .pool_idle_timeout(idle_timeout)
+                .pool_max_idle_per_host(0)
                 .build()
                 .context("failed to create an async HTTP client")?;
             let client_toolchains =

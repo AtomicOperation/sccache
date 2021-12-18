@@ -186,7 +186,7 @@ impl OverlayBuilder {
                 entry.build_count += 1;
                 entry.clone()
             } else {
-                trace!("Creating toolchain directory for {}", tc.archive_id);
+                debug!("Creating toolchain directory for {}", tc.archive_id);
                 fs::create_dir(&toolchain_dir)?;
 
                 let mut tccache = tccache.lock().unwrap();
